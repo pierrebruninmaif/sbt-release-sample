@@ -9,23 +9,6 @@ organization := "uk.co.callhandling"
 
 moduleName := "test-release"
 
-credentials += Credentials(Path.userHome / "sonatype.credentials")
-credentials += Credentials(Path.userHome / "pgp.credentials")
-
-useGpg := false
-
-pgpSecretRing := Path.userHome / ".gnupg/secring.gpg"
-
-pgpPublicRing := Path.userHome / ".gnupg/pubring.gpg"
-
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value)
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
-
 pomIncludeRepository := { (repo: MavenRepository) =>
    repo.root.startsWith("file:")
 }
@@ -36,17 +19,8 @@ homepage := Some(url("https://github.com/geekminer/sbt-release-sample"))
 
 scmInfo := homepage.value.map(url => ScmInfo(
   url,
-  "scm:git@github.com:geekminer/sbt-release-sample.git"
+  "scm:git@github.com:pierrebruninmaif/sbt-release-sample.git"
 ))
-
-developers := List(
-  Developer(
-    id = "geekbytes.0xff",
-    name = "mts.manu",
-    email = "0xff@geekbytes.io",
-    url = url("http://geekbytes.io")
-  )
-)
 
 publishMavenStyle := true
 
@@ -59,10 +33,6 @@ releaseProcess := Seq[ReleaseStep](
   runTest,                                // : ReleaseStep
   setReleaseVersion,                      // : ReleaseStep
   commitReleaseVersion,                   // : ReleaseStep, performs the initial git checks
-  tagRelease,                             // : ReleaseStep
-  ReleaseStep(action = Command.process(s"""sonatypeOpen "${organization.value}" "${name.value} v${version.value}"""", _)),
-  ReleaseStep(action = Command.process("publishSigned", _)),
-  ReleaseStep(action = Command.process("sonatypeRelease", _)),
   setNextVersion,                         // : ReleaseStep
   commitNextVersion,                      // : ReleaseStep
   pushChanges
