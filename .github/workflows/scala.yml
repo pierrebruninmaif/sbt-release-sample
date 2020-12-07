@@ -31,7 +31,6 @@ jobs:
     - name: push tag
       uses: ad-m/github-push-action@master
       with:
-        branch: master
-        tags: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
     - name: switch to tag
       run: git checkout tags/${{ env.VRELEASE_VERSION }}
