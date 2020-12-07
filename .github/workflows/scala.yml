@@ -28,9 +28,5 @@ jobs:
         git config --local user.email "izanami-github-actions@users.noreply.github.com"
         git config --local user.name "izanami-github-actions"
         sbt "release with-defaults release-version ${{ env.RELEASE_VERSION }}"
-    - name: push tag
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
     - name: switch to tag
       run: git checkout tags/${{ env.VRELEASE_VERSION }}
