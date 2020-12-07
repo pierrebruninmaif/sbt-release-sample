@@ -18,24 +18,20 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: version:
+      run: |
+        export VERSION=$(echo ${{ github.event.inputs.releaseVersion }} | sed 's/v//')
+        echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+        echo "VRELEASE_VERSION=v$VERSION" >> $GITHUB_ENV
     - name: release sbt
       run: |
         git config --local user.email "izanami-github-actions@users.noreply.github.com"
         git config --local user.name "izanami-github-actions"
-        sbt "release with-defaults release-version ${{ github.event.inputs.releaseVersion }}"
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        sbt "release with-defaults release-version ${{ env.RELEASE_VERSION }}"
+    - name: push tag
+      uses: ad-m/github-push-action@master
       with:
-        tag_name: "v${{ github.event.inputs.releaseVersion }}"
-        release_name: Release ${{ github.ref }}
-        body: |
-          Changes in this Release
-          - First Change
-          - Second Change
-        draft: false
-        prerelease: false
+        branch: master
+        tags: true
     - name: switch to tag
-      run: git checkout tags/v${{ github.event.inputs.releaseVersion }}
+      run: git checkout tags/${{ env.VRELEASE_VERSION }}
