@@ -18,7 +18,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - run: echo ${{ github.ref }}
+    - run: test  ${{ github.ref }} = "refs/heads/master" ||  echo "Release can be created only from master" && false
     - name: set version
       run: |
         export VERSION=$(echo ${{ github.event.inputs.releaseVersion }} | sed 's/v//')
