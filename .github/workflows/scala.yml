@@ -18,7 +18,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: version:
+    - name: set version
       run: |
         export VERSION=$(echo ${{ github.event.inputs.releaseVersion }} | sed 's/v//')
         echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
