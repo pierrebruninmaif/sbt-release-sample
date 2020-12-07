@@ -19,7 +19,10 @@ jobs:
       with:
         java-version: 1.8
     - name: release sbt
-      run: sbt "release with-defaults release-version ${{ github.event.inputs.releaseVersion }}"
+      run: |
+        git config --local user.email "izanami-github-actions@users.noreply.github.com"
+        git config --local user.name "izanami-github-actions"
+        sbt "release with-defaults release-version ${{ github.event.inputs.releaseVersion }}"
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
